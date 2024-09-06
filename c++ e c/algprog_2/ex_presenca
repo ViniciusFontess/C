@@ -1,0 +1,56 @@
+void bubble_sort(void *base, size_t n_itens, size_t size, int (*compare)(const void *, const void *));
+int (*compare)(const void *, const void *);
+
+int main() {
+
+    int value[] = { 40, 10, 100, 90, 20, 25 }, ordem; 
+    void *base = value;   
+  
+    printf("Vocẽ deseja em ordem crescente ou decrescente\n");
+    printf("Crescente - 0\n Decrescente - 1\n");
+    scanf("%d" , ordem);
+    if (ordem == 0){
+    bubble_sort(base, 6, sizeof(int), crescente());
+    }
+    else {
+    bubble_sort(base, 6, sizeof(int), decrescente());
+    }
+    return 0;
+}
+
+void bubble_sort(void *base, size_t n_itens, size_t size, int (*compare)(const void *, const void *)) {
+
+int i, j, *a, *b;
+
+
+    void comparar(int *elemento_a, int *elemento_b);
+
+    for (i = 1; i < size; i++)
+        for (j = 0; j < size - 1; j++)
+            int *a = (int*)(base);
+            int *b = (int*)(base + 1);
+            if ((*compare)(a, b)){
+                comparar(a, b);
+            }
+}
+
+
+
+
+
+void comparar(int *elemento_a, int *elemento_b) {
+    int aux;
+
+    aux = *elemento_a;
+    *elemento_a = *elemento_b;
+    *elemento_b = aux;
+}
+
+int crescente(const void *a, const void *b)
+{
+    return b < a;
+}
+int decrescente(const void *a, const void *b)
+{
+    return b > a;
+}
