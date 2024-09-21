@@ -2,7 +2,7 @@
 #include <stdlib.h>
 int main() {
     FILE *arq;
-    int i, soma = 0, nread;
+    int i;
     arq = fopen("30_fib.txt" , "w");
 
     if (arq == NULL){

@@ -12,12 +12,13 @@ int main() {
         printf("Ocorreu um erro. O arquivo não foi aberto\n Tente Novamente...");
     }
     else{
-        if (n > 30){
-        printf("Entre com um n menor que 30\n");
+        if (n > 30 && n < 1){
+        printf("Entre com um n valido\n");
         exit(1);
         }
-
-        for (int i = 0; i <= n; i++){
+        else{
+            printf("Entre com um n valido\n");
+            for (int i = 0; i <= n; i++){
             fscanf(arq, "%d", &achei);
         }
 
