@@ -3,41 +3,47 @@
 
 
 double fatorial(int n);
-double e_exp(double x, int n);
+double e_exp(double x, long long int n);
 
 int main(){
 
-    double x = 20;
-    int n = 19;
-    double res,res_recursive, verificar;
+    double x = 5;
+    long long int n = 13;
+    double res,res_recursive;
+    double verificar;
 
     res = exp(x);
     res_recursive = e_exp(x,n);
     //verificar = pow(x,n);
     //printf("verify: %lf\n" , verificar);
 
-    verificar = fatorial(n);
-    printf("verify: %lf\n" , verificar);
+    //verificar = fatorial(n);    
+    //printf("verify: %lf\n" , verificar);
 
     printf("Fórmula pronta:\n");
-    printf("e ^ 20 = %lf\n" , res);
+    printf("e ^ %lf = %lf\n" , x, res);
 
     printf("Recursiva:\n");
-    printf("e ^ 20 = %lf\n" , res_recursive);
+    printf("e ^ %lf = %lf\n" , x, res_recursive);
 
     return 0;
 }
 
-double e_exp(double x,int n){
-    if (x == 0){
-        return 1;
-    }
-    else if (x == 1){
-        return 2.7828;
+double e_exp(double x,long long int n){ // n = 3 x = 2 , n = 2 x = 2, n = 1 x = 2 , n = 0 x = 2 soma = 1
+                              // n = 3 x = 2 , n = 2 x = 2, n = 1 x = 2 soma = 1 , soma = 1 + 2
+                              // n = 3 x = 2. n = 2 x = 2 soma = 1+2, soma = 1+2+2
+                              // n = 3 x = 2 soma = 1 + 2 + 2 + 4/3
+
+
+    double soma;
+    if (n == 0){
+        soma = 1;
     }
     else{
-        return (pow(x,n-1)/fatorial(n-1)) + (pow(x,n-2)/fatorial(n-2));
+        soma = e_exp(x,n-1);
+        soma = soma + pow(x,n)/fatorial(n);
     }
+    return soma;
 }
 
 double fatorial(int n) {

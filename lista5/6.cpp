@@ -16,6 +16,6 @@ int main(){
     int n;
     printf("Digite o n:\n");
     scanf("%d" , &n);
-    printf("A quantidade de dígitos de n é: %d" , conta_digitos(n));
+    printf("A quantidade de dígitos de n é: %d\n" , conta_digitos(n));
     return 0;
 }
