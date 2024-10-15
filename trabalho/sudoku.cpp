@@ -134,7 +134,7 @@ FILE* crie_arquivo_binario(char quadro[9][9]) {
 	int len = strlen(v);
 	gen_random(v, len);
 	strcat(v, ".dat");
-
+-
 	c = fopen(v, "wb");
 
 	int n_jogadas;
@@ -389,8 +389,22 @@ void resolve_completo(FILE *fb, char quadro[9][9]) {
  */
 void resolve_um_passo(char quadro[9][9]) {
 	// TODO
-	
+
+	int c,d;
+	for (int i = 0; i < 9; i++)
+		for (int j = 0; j < 9; j++)
+			if (quadro[i][j] == 0){
+				c = i;
+				d = j;
+				break;
+			}
+	for (int i = 1; i <= 9; i++)
+		if (eh_valido(quadro,c,d,i) == VERDADEIRO){
+			quadro[c][d] = i;
+			break;
+		}
 }
+
 
 /* -----------------------------------------------------------------------------
  * SALVAR JOGADA BINARIO
@@ -400,10 +414,10 @@ void resolve_um_passo(char quadro[9][9]) {
 void salve_jogada_bin (FILE *fb, char quadro[9][9]) {
 	// TODO
 
-	fseek(SEEK_SET, 0);
+	fseek(fb, 0, SEEK_SET);
 	fread();
 	//
-	fseek(SEEK_SET, 0);
+	fseek(fb, 0, SEEK_SET);
 	fwrite();
 	//
 	fseek(SEEK_END, 0);
