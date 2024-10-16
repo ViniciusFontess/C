@@ -134,12 +134,19 @@ FILE* crie_arquivo_binario(char quadro[9][9]) {
 	int len = strlen(v);
 	gen_random(v, len);
 	strcat(v, ".dat");
--
+
 	c = fopen(v, "wb");
 
-	int n_jogadas;
+	int n_jogadas, n_quadros;
+	
 	printf("Digite o número de jogadas que deseja;\n");
 	scanf("%d" , &n_jogadas);
+
+	
+	for (int i = 0; i < n_jogadas; i++)
+		if (){
+			salve_jogada_bin(c, quadro);
+		}
 
 
 
@@ -390,19 +397,25 @@ void resolve_completo(FILE *fb, char quadro[9][9]) {
 void resolve_um_passo(char quadro[9][9]) {
 	// TODO
 
-	int c,d;
-	for (int i = 0; i < 9; i++)
-		for (int j = 0; j < 9; j++)
+	int c,d, contador = 0, aux;
+	for (int i = 0; i < 9; i++){
+		for (int j = 0; j < 9; j++){
 			if (quadro[i][j] == 0){
 				c = i;
 				d = j;
-				break;
 			}
-	for (int i = 1; i <= 9; i++)
-		if (eh_valido(quadro,c,d,i) == VERDADEIRO){
-			quadro[c][d] = i;
-			break;
+		for (int i = 1; i <= 9; i++){
+			if (eh_valido(quadro,c,d,i) == VERDADEIRO){
+				contador+=1;
+				aux = i;
+			}
 		}
+	if (contador == 1){
+		quadro[c][d] = aux;
+	}
+
+}
+	}
 }
 
 
@@ -415,13 +428,13 @@ void salve_jogada_bin (FILE *fb, char quadro[9][9]) {
 	// TODO
 
 	fseek(fb, 0, SEEK_SET);
-	fread();
+	fwrite(quadro, sizeof(int), quadro[9][9], fb);
 	//
 	fseek(fb, 0, SEEK_SET);
-	fwrite();
+	fwrite(quadro, sizeof(int), quadro[9][9], fb);
 	//
-	fseek(SEEK_END, 0);
-	fwrite();
+	fseek(fb, 0, SEEK_END);
+	fwrite(quadro, sizeof(int), quadro[9][9], fb);
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
