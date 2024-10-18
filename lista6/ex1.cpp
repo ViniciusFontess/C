@@ -106,9 +106,11 @@ void remova_tudo (celula *lst){
     p = lst;
     q = lst->seg;
 
-    for(;q!= NULL; q = q->seg)
+    for(;q!= NULL; q = q->seg){
         free(p);
         p = q;
+}
+    free(p);
 }
 
 void remova_tudoR (celula *lst){
