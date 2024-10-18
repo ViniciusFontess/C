@@ -69,12 +69,13 @@ void insira_em_ordem(int y, celula *lst){
     insira(y, p);
 }
 
-celula * busque (int x, celula *p){
-    p->conteudo = x;
-    if (p->seg == NULL){
-        return NULL;
+celula * busque (int x, celula *lst){
+    celula *p;
+    p = lst;
+    while (p->seg != NULL && y> p->seg->conteudo){
+        p = p ->seg;
     }
-    return p;
+    return p->seg;
 }
 
 void remova_seguinte(celula *p){
