@@ -60,32 +60,48 @@ int main() {
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
 FILE* carregue(char quadro[9][9]) {
-	int opcao;
 
 	
+	int opcao;
+	char padrao[40] = "carregar/", nome_arquivo[20], padrao2[40] = "bin/", nome_arquivo2[20];
+	FILE *arq = NULL;
+
 	menu_arquivo();
 	opcao = leia_opcao();
 
-	// TODO Função incompleta
+	switch (opcao)
+	{
 
-	switch(opcao) {
+	case 1:
+		printf("Digite o nome do arquivo txt que deseja carregar : ");
+		scanf("%s", nome_arquivo);
+		strcat(padrao, nome_arquivo);
 
-		// carregar novo sudoku
-		case 1:
-			carregue_novo_jogo;
+		
+		carregue_novo_jogo(quadro, padrao);
 
-		// continuar jogo
-		case 2:
-			carregue_continue_jogo;
+		break;
 
-		// retornar ao menu anterior
-		case 9:
-			menu;
 
-		default:
-			break;
+	case 2:
+		printf("Digite o nome do arquivo binário que deseja continuar: ");
+		scanf("%s", nome_arquivo2);
+		strcat(padrao2, nome_arquivo2);
+
+		carregue_continue_jogo(quadro, padrao2);
+
+		break;
+
+	case 9:
+		break;
+
+	default:
+		printf(INVALID_OPTION);
+		return carregue(quadro);
+	}
+	return arq;
 }
-}
+
 
 /* -----------------------------------------------------------------------------
  * CARREGAR CONTINUAR JOGO
@@ -94,7 +110,20 @@ FILE* carregue(char quadro[9][9]) {
  */
 FILE* carregue_continue_jogo (char quadro[9][9], char *nome_arquivo) {
 	// TODO
+	FILE *arquivo;
+	arquivo = fopen(nome_arquivo, "rb");
+	if (arquivo == NULL)
+	{
+		printf(ERROR_FILE_MSG);
+	}
+	else
+	{
+	
+		fread(quadro, sizeof(char), 81, arquivo);
+		fclose(arquivo);
+	}
 
+	return arquivo;
 }
 
 /* -----------------------------------------------------------------------------
@@ -105,18 +134,21 @@ FILE* carregue_continue_jogo (char quadro[9][9], char *nome_arquivo) {
 void carregue_novo_jogo(char quadro[9][9], char *nome_arquivo) {
 	// TODO
 
-	FILE *c;
-	int arquivo_n;
-
-	printf("Digite qual arquivo deseja:\n[1]\n[2]\n[3]\n");
-	if (arquivo_n == 1){
-	c = fopen("01.txt", "r");
+	// TODO
+	FILE *arquivo;
+	arquivo = fopen(nome_arquivo, "r");
+	if (arquivo == NULL)
+	{
+		printf(ERROR_FILE_MSG);
 	}
-	else if (arquivo_n == 2){
-	c = fopen("02.txt", "r");
-	}
-	else{
-	c = fopen("03.txt", "r");
+	else
+	{
+		for (int i = 0; i < 9; i++){
+			for (int j = 0; j < 9; j++){
+			fscanf(arquivo, "%d", (int *) &quadro[i][j]);
+			}
+		}
+		fclose(arquivo);
 	}
 	
 }
@@ -129,27 +161,24 @@ void carregue_novo_jogo(char quadro[9][9], char *nome_arquivo) {
 FILE* crie_arquivo_binario(char quadro[9][9]) {
 	// TODO
 
-	FILE *c;
-	char v[11];
-	int len = strlen(v);
-	gen_random(v, len);
-	strcat(v, ".dat");
+	char juntar[10], local[40] = "arquivo_binario/";
+	gen_random(juntar, 5);
+	strcat(local, juntar);
+	strcat(local, ".bin");
 
-	c = fopen(v, "wb");
+	FILE *f = fopen(local, "wb");
 
-	int n_jogadas, n_quadros;
-	
-	printf("Digite o número de jogadas que deseja;\n");
-	scanf("%d" , &n_jogadas);
-
-	
-	for (int i = 0; i < n_jogadas; i++)
-		if (){
-			salve_jogada_bin(c, quadro);
-		}
-
-
-
+	if (f == NULL)
+	{
+		printf(ERROR_FILE_MSG);
+		return NULL;
+	}
+	else
+	{
+		fwrite(quadro, sizeof(char), 81 , f);
+		fclose(f);
+	}
+	return f;
 
 }
 
@@ -204,8 +233,8 @@ int eh_valido(const char quadro[9][9], int x, int y, int valor) {
  */
 int eh_valido_na_coluna(const char quadro[9][9], int y, int valor) {  //// FINALIZADO
 	// TODO
-		for (int i = 0; i <= y; i++){
-		if (quadro[0][i] != valor){
+		for (int i = 0; i <= 8; i++){
+		if (quadro[y][i] != valor){
 			return VERDADEIRO;
 		}
 		else 
@@ -221,8 +250,8 @@ int eh_valido_na_coluna(const char quadro[9][9], int y, int valor) {  //// FINAL
  */
 int eh_valido_na_linha(const char quadro[9][9], int x, int valor) {   //// FINALIZADO
 	// TODO
-	for (int i = 0; i <= x; i++){
-		if (quadro[i][0] != valor){
+	for (int i = 0; i <= 8; i++){
+		if (quadro[i][x] != valor){
 			return VERDADEIRO;
 		}
 		else 
@@ -401,23 +430,21 @@ void resolve_um_passo(char quadro[9][9]) {
 	for (int i = 0; i < 9; i++){
 		for (int j = 0; j < 9; j++){
 			if (quadro[i][j] == 0){
+			for (int i = 1; i <= 9; i++){
+				if (eh_valido(quadro,c,d,i) == VERDADEIRO){
+				contador+=1;
+				aux = i;
 				c = i;
 				d = j;
 			}
-		for (int i = 1; i <= 9; i++){
-			if (eh_valido(quadro,c,d,i) == VERDADEIRO){
-				contador+=1;
-				aux = i;
-			}
-		}
-	if (contador == 1){
-		quadro[c][d] = aux;
-	}
-
+				if (contador == 1){
+				quadro[c][d] = aux;
+				}
 }
 	}
 }
-
+	}
+}
 
 /* -----------------------------------------------------------------------------
  * SALVAR JOGADA BINARIO
@@ -427,14 +454,17 @@ void resolve_um_passo(char quadro[9][9]) {
 void salve_jogada_bin (FILE *fb, char quadro[9][9]) {
 	// TODO
 
+	int jogadas;
+
 	fseek(fb, 0, SEEK_SET);
-	fwrite(quadro, sizeof(int), quadro[9][9], fb);
-	//
+	fwrite(quadro, sizeof(char), 81 , fb);
+	fread(&jogadas, sizeof(int), jogadas+1 , fb);
 	fseek(fb, 0, SEEK_SET);
-	fwrite(quadro, sizeof(int), quadro[9][9], fb);
-	//
+	fwrite(quadro, sizeof(char), 81, fb);
+	
+
 	fseek(fb, 0, SEEK_END);
-	fwrite(quadro, sizeof(int), quadro[9][9], fb);
+	fwrite(quadro, sizeof(char), quadro[9][9], fb);
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
