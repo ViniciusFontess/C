@@ -87,9 +87,8 @@ FILE *carregue(char quadro[9][9])
 		scanf("%s", nome_arquivo2);
 		strcat(padrao2, nome_arquivo2);
 
-		carregue_continue_jogo(quadro, padrao2);
-
-		break;
+		arq = carregue_continue_jogo(quadro, padrao2);
+		return arq;
 
 	case 9:
 		break;
@@ -119,7 +118,7 @@ FILE *carregue_continue_jogo(char quadro[9][9], char *nome_arquivo)
 	{
 
 		fread(quadro, sizeof(char), 81, arquivo);
-
+	
 	}
 
 	return arquivo;
@@ -272,9 +271,9 @@ int eh_valido_no_quadrante3x3(const char quadro[9][9], int x, int y, int valor)
 { //// FINALIZADO
 	// TODO
 	int quad = determine_quadrante(x, y);
-	for (int i = 0; ini_x(quad) <= fim_x(quad); i++)
+	for (int i = ini_x(quad); i <= fim_x(quad); i++)
 	{
-		for (int j = 0; ini_y(quad) <= fim_y(quad); j++)
+		for (int j = ini_y(quad); j <= fim_y(quad); j++)
 		{
 			if (quadro[i][j] == valor)
 			{
@@ -442,37 +441,31 @@ void resolve_completo(FILE *fb, char quadro[9][9])
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
 void resolve_um_passo(char quadro[9][9])
+
 {
 	// TODO
 
-	int c, d, contador = 0;
-	for (int i = 0; i < 9; i++)
-	{
-		for (int j = 0; j < 9; j++)
-		{
-			if (quadro[i][j] == 0)
-			{
-				for (int k = 1; k <= 9; k++)
-				{
-					if (eh_valido(quadro, i, j, i) == VERDADEIRO)
-					{
-						contador += 1;
-						c = i;
-						d = j;
-						}
 
+	for (int i = 0; i < 9; i++){
+		for (int j = 0; j < 9; j++){
+			if (quadro[i][j] == 0){
+				int contador = 0;
+				int aux = 0;
+				for (int k = 1; k <= 9; k++){
+					if (eh_valido(quadro, i, j, k) == VERDADEIRO){
+						contador += 1;
+						aux = k;
+						}
 					}
-				}
-					if (contador == 1)
-					{
-						quadro[c][d] = c;
+					if (contador == 1){
+						quadro[i][j] = aux;
 						return;
 					}
-				
-			}
+
 		}
 	}
-
+}
+}
 
 /* -----------------------------------------------------------------------------
  * SALVAR JOGADA BINARIO
@@ -480,20 +473,21 @@ void resolve_um_passo(char quadro[9][9])
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
 void salve_jogada_bin(FILE *fb, char quadro[9][9])
-{
-	// TODO
-
-	int n;
-	
+{ 	
+	int jogadas = 0;
+	printf("Digite a quantidade de jogadas que deseja fazer:\n");
+	scanf("%d", jogadas);
 	fseek(fb, 0, SEEK_SET);
-	fwrite(quadro, sizeof(char), 81, fb);
-	fseek(fb, 0, SEEK_SET);
-	fwrite(quadro, sizeof(char), 81, fb);
-
-	fseek(fb, 0, SEEK_END);
-	fwrite(quadro, sizeof(char), 81, fb);
+    fwrite(&jogadas, sizeof(int), 1, fb);
+    
+    fseek(fb, sizeof(int), SEEK_SET);
+    fwrite(quadro, sizeof(char), 81, fb);
+    
+  
+    for (int i = 1; i <= jogadas; i++) {
+        fwrite(quadro, sizeof(char), 81, fb);
+    }
 }
-
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
