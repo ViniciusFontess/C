@@ -109,7 +109,7 @@ FILE *carregue_continue_jogo(char quadro[9][9], char *nome_arquivo)
 {
 	// TODO
 	FILE *arquivo;
-	arquivo = fopen(nome_arquivo, "rb");
+	arquivo = fopen(nome_arquivo, "rb+");
 	if (arquivo == NULL)
 	{
 		printf(ERROR_FILE_MSG);
@@ -166,8 +166,9 @@ FILE *crie_arquivo_binario(char quadro[9][9])
 	gen_random(juntar, 5);
 	strcat(local, juntar);
 	strcat(local, ".dat");
+	int n_jogadas;
 
-	FILE *f = fopen(local, "wb");
+	FILE *f = fopen(local, "wb+");
 
 	if (f == NULL)
 	{
@@ -176,6 +177,9 @@ FILE *crie_arquivo_binario(char quadro[9][9])
 	}
 	else
 	{
+		fseek(f, 0, SEEK_SET);
+		fwrite(&n_jogadas, sizeof(int), 1, f);
+		fseek(f, 5, SEEK_SET);
 		fwrite(quadro, sizeof(char), 81, f);
 		fclose(f);
 	}
@@ -475,18 +479,15 @@ void resolve_um_passo(char quadro[9][9])
 void salve_jogada_bin(FILE *fb, char quadro[9][9])
 { 	
 	int jogadas = 0;
-	printf("Digite a quantidade de jogadas que deseja fazer:\n");
-	scanf("%d", jogadas);
+	
 	fseek(fb, 0, SEEK_SET);
-    fwrite(&jogadas, sizeof(int), 1, fb);
+    	fwrite(&jogadas, sizeof(int), 1, fb);
     
-    fseek(fb, sizeof(int), SEEK_SET);
-    fwrite(quadro, sizeof(char), 81, fb);
+   	fseek(fb, sizeof(int)+1, SEEK_SET);
+    	fwrite(quadro, sizeof(char), 81, fb);
     
-  
-    for (int i = 1; i <= jogadas; i++) {
-        fwrite(quadro, sizeof(char), 81, fb);
-    }
+	fwrite(quadro, sizeof(char), 81, fb);
+    
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
