@@ -166,7 +166,7 @@ FILE *crie_arquivo_binario(char quadro[9][9])
 	gen_random(juntar, 5);
 	strcat(local, juntar);
 	strcat(local, ".dat");
-	int n_jogadas;
+	int n_jogadas = 0;
 
 	FILE *f = fopen(local, "wb+");
 
@@ -179,9 +179,9 @@ FILE *crie_arquivo_binario(char quadro[9][9])
 	{
 		fseek(f, 0, SEEK_SET);
 		fwrite(&n_jogadas, sizeof(int), 1, f);
-		fseek(f, 5, SEEK_SET);
+		fseek(f, 0, SEEK_END);
 		fwrite(quadro, sizeof(char), 81, f);
-		fclose(f);
+		
 	}
 	return f;
 }
@@ -478,15 +478,22 @@ void resolve_um_passo(char quadro[9][9])
  */
 void salve_jogada_bin(FILE *fb, char quadro[9][9])
 { 	
-	int jogadas = 0;
-	
-	fseek(fb, 0, SEEK_SET);
-    	fwrite(&jogadas, sizeof(int), 1, fb);
+	int n_jogadas;
+    fseek(fb, 0, SEEK_SET);
+    fread(&n_jogadas, sizeof(int), 1, fb);
+
+ 
+    n_jogadas =+ 1;
+
     
-   	fseek(fb, sizeof(int)+1, SEEK_SET);
-    	fwrite(quadro, sizeof(char), 81, fb);
-    
-	fwrite(quadro, sizeof(char), 81, fb);
+    fseek(fb, 0, SEEK_SET);
+    fwrite(&n_jogadas, sizeof(int), 1, fb);
+
+ 
+    fseek(fb, 0, SEEK_END);
+    fwrite(quadro, sizeof(char), 81, fb);
+
+
     
 }
 
