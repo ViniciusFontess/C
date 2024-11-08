@@ -116,7 +116,7 @@ FILE *carregue_continue_jogo(char quadro[9][9], char *nome_arquivo)
 	}
 	else
 	{
-
+		fseek(arquivo, -81, SEEK_END);
 		fread(quadro, sizeof(char), 81, arquivo);
 	
 	}
@@ -146,7 +146,7 @@ void carregue_novo_jogo(char quadro[9][9], char *nome_arquivo)
 		{
 			for (int j = 0; j < 9; j++)
 			{
-				fscanf(arquivo, "%d", (int *)&quadro[i][j]);
+				fscanf(arquivo, "%d", (char *)&quadro[i][j]);
 			}
 		}
 
