@@ -110,13 +110,21 @@ FILE *carregue_continue_jogo(char quadro[9][9], char *nome_arquivo)
 	// TODO
 	FILE *arquivo;
 	arquivo = fopen(nome_arquivo, "rb+");
+	int numero_jogadas;
+
 	if (arquivo == NULL)
 	{
 		printf(ERROR_FILE_MSG);
 	}
 	else
 	{
-		fseek(arquivo, -81, SEEK_END);
+		int numero_jogadas;
+		fseek(arquivo, 0, SEEK_SET);
+		fread(&numero_jogadas, sizeof(int), 1, arquivo);
+
+		printf("O total do número de jogadas foi de: %d\n", numero_jogadas);
+
+		fseek(arquivo, 4, SEEK_SET);
 		fread(quadro, sizeof(char), 81, arquivo);
 	
 	}
@@ -164,7 +172,7 @@ FILE *crie_arquivo_binario(char quadro[9][9])
 
 	char juntar[10], local[40] = "bin/";
 	gen_random(juntar, 5);
-	strcat(local, juntar);
+	strcat(local, juntar);	
 	strcat(local, ".dat");
 	int n_jogadas = 0;
 
@@ -179,7 +187,7 @@ FILE *crie_arquivo_binario(char quadro[9][9])
 	{
 		fseek(f, 0, SEEK_SET);
 		fwrite(&n_jogadas, sizeof(int), 1, f);
-		fseek(f, 0, SEEK_END);
+		fseek(f, 4, SEEK_SET);
 		fwrite(quadro, sizeof(char), 81, f);
 		
 	}
