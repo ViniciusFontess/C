@@ -422,6 +422,7 @@ void jogue()
 
 		case 9:
 			puts("Programa finalizado ..");
+			fclose(fb);
 			break;
 
 		default:
@@ -490,11 +491,8 @@ void salve_jogada_bin(FILE *fb, char quadro[9][9])
     n_jogadas += 1;
     fseek(fb, 0, SEEK_SET);
     fwrite(&n_jogadas, sizeof(int), 1, fb);
-    fseek(fb, 4, SEEK_END);
-    fwrite(quadro, sizeof(char), 81, fb);
-
-
-    
+    fseek(fb, 4, SEEK_SET);
+    fwrite(quadro, sizeof(char), 81, fb);    
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
