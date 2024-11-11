@@ -110,7 +110,6 @@ FILE *carregue_continue_jogo(char quadro[9][9], char *nome_arquivo)
 	// TODO
 	FILE *arquivo;
 	arquivo = fopen(nome_arquivo, "rb+");
-	int numero_jogadas;
 
 	if (arquivo == NULL)
 	{
@@ -119,12 +118,11 @@ FILE *carregue_continue_jogo(char quadro[9][9], char *nome_arquivo)
 	else
 	{
 		int numero_jogadas;
+
 		fseek(arquivo, 0, SEEK_SET);
 		fread(&numero_jogadas, sizeof(int), 1, arquivo);
-
 		printf("O total do número de jogadas foi de: %d\n", numero_jogadas);
-
-		fseek(arquivo, 4, SEEK_SET);
+		fseek(arquivo, 4 , SEEK_SET);
 		fread(quadro, sizeof(char), 81, arquivo);
 	
 	}
@@ -154,7 +152,7 @@ void carregue_novo_jogo(char quadro[9][9], char *nome_arquivo)
 		{
 			for (int j = 0; j < 9; j++)
 			{
-				fscanf(arquivo, "%d", (char *)&quadro[i][j]);
+				fscanf(arquivo, "%d", (int *)&quadro[i][j]);
 			}
 		}
 
@@ -171,7 +169,7 @@ FILE *crie_arquivo_binario(char quadro[9][9])
 	// TODO
 
 	char juntar[10], local[40] = "bin/";
-	gen_random(juntar, 5);
+	gen_random(juntar, 4);
 	strcat(local, juntar);	
 	strcat(local, ".dat");
 	int n_jogadas = 0;
@@ -486,19 +484,13 @@ void resolve_um_passo(char quadro[9][9])
  */
 void salve_jogada_bin(FILE *fb, char quadro[9][9])
 { 	
-	int n_jogadas;
+	int n_jogadas = 0;
     fseek(fb, 0, SEEK_SET);
     fread(&n_jogadas, sizeof(int), 1, fb);
-
- 
-    n_jogadas =+ 1;
-
-    
+    n_jogadas += 1;
     fseek(fb, 0, SEEK_SET);
     fwrite(&n_jogadas, sizeof(int), 1, fb);
-
- 
-    fseek(fb, 0, SEEK_END);
+    fseek(fb, 4, SEEK_END);
     fwrite(quadro, sizeof(char), 81, fb);
 
 
