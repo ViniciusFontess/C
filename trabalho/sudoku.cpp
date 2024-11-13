@@ -405,9 +405,9 @@ void jogue()
 			printf("Entre com a posicao e o valor (linha, coluna, valor): ");
 			scanf("%d %d %d", &x, &y, &valor);
 
-			if (eh_valido(quadro, x, y, valor))
+			if (eh_valido(quadro, x-1, y-1, valor))
 			{
-				quadro[x][y] = valor;
+				quadro[x-1][y-1] = valor;
 				salve_jogada_bin(fb, quadro);
 			}
 			else
