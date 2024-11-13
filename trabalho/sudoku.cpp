@@ -115,20 +115,27 @@ FILE *carregue_continue_jogo(char quadro[9][9], char *nome_arquivo)
 	{
 		printf(ERROR_FILE_MSG);
 	}
-	else
-	{
 		int numero_jogadas;
+	fseek(arquivo, 0, SEEK_SET);
+	fread(&numero_jogadas, sizeof(int), 1, arquivo);
+	printf("O total do número de jogadas foi de: %d\n", numero_jogadas);
 
-		fseek(arquivo, 0, SEEK_SET);
-		fread(&numero_jogadas, sizeof(int), 1, arquivo);
-		printf("O total do número de jogadas foi de: %d\n", numero_jogadas);
-		fseek(arquivo, 4 , SEEK_SET);
-		fread(quadro, sizeof(char), 81, arquivo);
-	
+	// Variável para iterar sobre cada quadro salvo e mostrar na tela
+	int jogada_atual = 0;
+
+	// Leitura e exibição de todos os quadros
+	while (fread(quadro, sizeof(char), 81, arquivo) == 81)
+	{
+		printf("\nQuadro da Jogada %d:\n", jogada_atual);
+		imprima(quadro);
+		jogada_atual++;
 	}
 
 	return arquivo;
-}
+
+	
+	}
+
 
 /* -----------------------------------------------------------------------------
  * CARREGAR NOVO JOGO
@@ -491,7 +498,7 @@ void salve_jogada_bin(FILE *fb, char quadro[9][9])
     n_jogadas += 1;
     fseek(fb, 0, SEEK_SET);
     fwrite(&n_jogadas, sizeof(int), 1, fb);
-    fseek(fb, 4, SEEK_SET);
+    fseek(fb, 0, SEEK_END);
     fwrite(quadro, sizeof(char), 81, fb);    
 }
 
